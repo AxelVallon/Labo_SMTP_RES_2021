@@ -1,4 +1,4 @@
-package www.heig-vd.res;
+package www.heigvd.res;
 
 /**
  * Hello world!
