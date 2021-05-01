@@ -1,0 +1,20 @@
+---
+port: 3303
+ip: "0.0.0.0"
+messages:
+  - blague 1
+  - blague 2
+  - blague 3
+groups:
+  - sender: Paul
+    recipients:
+      - email: Martin
+      - email: Antoine
+      - email: Dimitri
+
+  - sender: Martin
+    recipients:
+      - email: Paul
+      - email: Antoine
+      - email: Dimitri
+
