@@ -1,4 +1,7 @@
 # Labo_SMTP_RES_2021
+
+[![Java CI with Maven](https://github.com/AxelVallon/Labo_SMTP_RES_2021/actions/workflows/maven.yml/badge.svg)](https://github.com/AxelVallon/Labo_SMTP_RES_2021/actions/workflows/maven.yml)
+
 ## Description du projet
 
 Ce projet est un client qui permet à son utilisateur d'envoyer automatiquement d'une adresse mails à plusieurs autres adresses email une blague, et sans authentification.
