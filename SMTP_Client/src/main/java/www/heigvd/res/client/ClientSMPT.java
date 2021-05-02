@@ -109,7 +109,6 @@ public class ClientSMPT {
      * @throws IOException Exception lancée quand source ne commence pas par key
      */
     private void startWith(String source, String key) throws IOException {
-        System.out.println(source);
         if (!source.startsWith(key)){
             throw new IOException("Erreur lors de l'envoi du mail");
         }
