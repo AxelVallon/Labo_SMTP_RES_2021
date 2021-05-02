@@ -132,7 +132,7 @@ Pour utiliser ce client SMTP, vous devrez effectuer les étapes suivantes :
 
 La schéma relationnel de cette application est le suivant : 
 
-![photo_2021-05-02_20-30-33](./figures/photo_2021-05-02_20-30-33.jpg)
+![photo_2021-05-02_20-30-33](./figures/diagrammeClass.jpg)
 
 Vous pouvez observer les éléments suivants sur le schéma : 
 
