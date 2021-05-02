@@ -16,12 +16,6 @@ import java.util.List;
 public class ClientSMPT {
     private final String DEFAULT_CONFIG = "config/config.yaml";
     private final String DEFAULT_MESSAGES = "config/mails.yaml";
-    //TODO : modifier avec fichier de config
-    private String hostName = "localhost";
-    private int portNumber = 25;
-    private String mailSource = "lev.pozniakoff@balelec.ch";
-    private String mailDestination = "lev.pozniakoff@heig-vd.ch";
-
     private ConfigPranker config;
     private Messages messages;
 

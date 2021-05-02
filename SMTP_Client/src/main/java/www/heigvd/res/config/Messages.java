@@ -14,20 +14,28 @@ import java.util.List;
 public class Messages {
     @Getter
     List<String> messages;
+    @Getter
+    String subject;
 
     public Messages(){
         this.messages = new ArrayList<>();
+        this.subject = ";";
     }
 
-    public Messages(List<String> messages){
+    public Messages(List<String> messages, String subject){
         this();
         checkListValidity(messages);
         this.messages.addAll(messages);
+        this.subject = subject;
     }
 
     public void setMessages(List<String> messages) {
         checkListValidity(messages);
         this.messages = messages;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public void shuffleMessages(){
