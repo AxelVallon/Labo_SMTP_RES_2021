@@ -8,6 +8,7 @@ import lombok.Getter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Messages {
@@ -27,6 +28,14 @@ public class Messages {
     public void setMessages(List<String> messages) {
         checkListValidity(messages);
         this.messages = messages;
+    }
+
+    public void shuffleMessages(){
+        Collections.shuffle(messages);
+    }
+
+    public String get(int i){
+        return messages.get(i);
     }
 
     /**

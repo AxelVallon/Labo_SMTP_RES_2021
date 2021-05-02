@@ -21,19 +21,19 @@ import java.util.List;
 @Getter
 public class ConfigPranker {
     private int port;
-    private String ip;
+    private String hostname;
     private List<Group> groups;
 
     public ConfigPranker(){
         this.groups = new ArrayList<>();
-        this.ip = "";
+        this.hostname = "";
     }
 
-    public ConfigPranker(int port, String ip, List<String> messages, List<Group> groups) {
+    public ConfigPranker(int port, String hostname, List<String> messages, List<Group> groups) {
         this.port = port;
-        if(!ipValid(ip))
-            throw new IllegalArgumentException("IP is not valid");
-        this.ip = ip;
+        //if(!ipValid(hostname))
+            //throw new IllegalArgumentException("IP is not valid");
+        this.hostname = hostname;
         if(groups.isEmpty())
             throw new IllegalArgumentException("Minimum size for groups is 1");
         this.groups = groups;
@@ -43,10 +43,10 @@ public class ConfigPranker {
         this.port = port; //voir condition de fail
    }
 
-   public void setIp(String ip){
-        if(!ipValid(ip))
-            throw new IllegalArgumentException("IP is not valid");
-        this.ip = ip;
+   public void setHostname(String hostname){
+        //if(!ipValid(hostname))
+            //throw new IllegalArgumentException("IP is not valid");
+        this.hostname = hostname;
    }
 
    public void setGroups(List<Group> groups){

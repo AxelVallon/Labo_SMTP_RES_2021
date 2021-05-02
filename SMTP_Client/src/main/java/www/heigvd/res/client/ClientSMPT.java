@@ -1,25 +1,38 @@
 package www.heigvd.res.client;
 
+import www.heigvd.res.config.ConfigPranker;
+import www.heigvd.res.config.Messages;
+import www.heigvd.res.config.Victim;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class ClientSMPT {
+    private final String DEFAULT_CONFIG = "config/config.yaml";
+    private final String DEFAULT_MESSAGES = "config/mails.yaml";
     //TODO : modifier avec fichier de config
     private String hostName = "localhost";
     private int portNumber = 25;
     private String mailSource = "lev.pozniakoff@balelec.ch";
     private String mailDestination = "lev.pozniakoff@heig-vd.ch";
 
-    public ClientSMPT(){
+    private ConfigPranker config;
+    private Messages messages;
+
+    public ClientSMPT() throws IOException {
         //TODO init param config, à voir si tu veux le passer par le main
+        config = ConfigPranker.loadFromConfig(DEFAULT_CONFIG);
+        messages = Messages.loadFromYAML(DEFAULT_MESSAGES);
+
     }
 
     public void sendMail() throws IOException {
-        Socket socket = new Socket(hostName, portNumber);
+        Socket socket = new Socket(config.getHostname(), config.getPort());
         PrintWriter os =
                 new PrintWriter(socket.getOutputStream(), true);
         BufferedReader in =
@@ -33,19 +46,30 @@ public class ClientSMPT {
             tmp = in.readLine();
             startWith(tmp, "250");
         } while (!tmp.startsWith("250 "));
-        os.println("MAIL FROM:<" + mailSource + ">");
-        startWith(in.readLine(), "250 ");
-        //TODO: ajouter boucle pour plusieurs RCPT TO
-        os.println("RCPT TO:<" + mailDestination + ">");
-        startWith(in.readLine(), "250 ");
-        os.println("DATA");
-        startWith(in.readLine(), "354 ");
-        //TODO send data, forge mail
-        os.println("Je suis un drôle de mail");
-        os.println("\r\n.\r\n");
-        startWith(in.readLine(), "250 ");
-        os.println("QUIT");
-        startWith(in.readLine(), "221 ");
+
+        messages.shuffleMessages();
+        //Pacours des groupes
+        for(int groupIndex=0; groupIndex < config.getGroups().size(); ++groupIndex) {
+            List<Victim> recipients = config.getGroups().get(groupIndex).getRecipients();
+            os.println("MAIL FROM:<" + config.getGroups().get(groupIndex).getSender().getEmail() + ">");
+            startWith(in.readLine(), "250 ");
+            //TODO: ajouter boucle pour plusieurs RCPT TO
+            for (int RCPTIndex = 0; RCPTIndex < recipients.size(); ++RCPTIndex) {
+                os.println("RCPT TO:<" + recipients.get(RCPTIndex).getEmail() + ">");
+                startWith(in.readLine(), "250 ");
+            }
+            os.println("DATA");
+            startWith(in.readLine(), "354 ");
+            //TODO send data, forge mail
+            os.println(messages.get(groupIndex % messages.getMessages().size()));
+            os.println("\r\n.\r\n");
+            startWith(in.readLine(), "250 ");
+            os.println("QUIT");
+            startWith(in.readLine(), "221 ");
+
+
+
+        }
         socket.close();
         in.close();
         os.close();
