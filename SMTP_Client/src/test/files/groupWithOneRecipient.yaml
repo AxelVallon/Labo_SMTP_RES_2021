@@ -1,9 +1,10 @@
 port: 3303
-ip: "0.0.0.0"
+hostname: "0.0.0.0"
 
 groups:
   - sender: paul@paul.ch
     recipients:
       - email: martin@martin.ch
+
 
 

@@ -1,5 +1,5 @@
 /**
- * @Author: Axel VALLON, Lev POZNIAKOFF
+ * Auteurs: Axel VALLON, Lev POZNIAKOFF
  *
  * Description: POJO de la configuration du pranker
  * la config contient, le port, l'ip, et les groupes
@@ -9,10 +9,7 @@ package www.heigvd.res.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-
 import lombok.Getter;
-import lombok.Setter;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -21,35 +18,68 @@ import java.util.List;
 
 @Getter
 public class ConfigPranker {
-    @Setter private int port;
+    private int port;
     private String hostname;
     private List<Group> groups;
 
-    public ConfigPranker(){
-        hostname = "";
-        groups = new ArrayList<>();
-    }
+    /**
+     * Constructeur par défaut
+     * utile pour jackson
+     */
+    public ConfigPranker(){}
 
-    public ConfigPranker(int port, String hostname, List<Group> groups) {
-        if(hostname.isEmpty())
+    /**
+     * Constructeur
+     * @param port le port (1 <= port <= 65535
+     * @param hostname (taille > 0)
+     * @param groups (taille > 0)
+     * @throws IllegalArgumentException si les paramètres sont invalides
+     */
+    public ConfigPranker(int port, String hostname, List<Group> groups) throws IllegalArgumentException{
+        if(hostname.length() == 0)
             throw new IllegalArgumentException("hostname can't be empty");
         if(groups.isEmpty())
             throw new IllegalArgumentException("Minimum size for groups is 1");
+        if((port < 1) || (port > 65535))
+            throw new IllegalArgumentException("Port is invalid");
         this.hostname = hostname;
         this.port = port;
         this.groups = groups;
     }
 
-   public void setHostname(String hostname){
-        if(hostname.isEmpty())
+    /**
+     * setter
+     * @param hostname
+     * @throws IllegalArgumentException si le hostname est vide
+     */
+   public void setHostname(String hostname) throws IllegalArgumentException{
+        if(hostname == null)
             throw new IllegalArgumentException("hostname can't be empty");
         this.hostname = hostname;
    }
 
-   public void setGroups(List<Group> groups){
-        if(groups.isEmpty())
+    /**
+     * setter
+     * @param groups
+     * @throw si la liste en paramètre est vide
+     */
+   public void setGroups(List<Group> groups) throws IllegalArgumentException{
+        if(groups.size() == 0)
             throw new IllegalArgumentException("Groups can't be empty, minimum size is 1");
+        if(this.groups == null)
+            this.groups = new ArrayList<>();
         this.groups.addAll(groups);
+   }
+
+    /**
+     * setter
+     * @param port
+     * @throws IllegalArgumentException si le port est invalide
+     */
+   public void setPort(int port){
+       if((port < 1) || (port > 65535))
+           throw new IllegalArgumentException("Port is invalid");
+       this.port = port;
    }
 
     /**

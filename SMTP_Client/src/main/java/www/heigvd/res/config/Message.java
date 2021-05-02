@@ -1,5 +1,5 @@
 /**
- * Autheur: Lev POZNIAKOFF, Axel VALLON
+ * Auteurs: Lev POZNIAKOFF, Axel VALLON
  */
 package www.heigvd.res.config;
 

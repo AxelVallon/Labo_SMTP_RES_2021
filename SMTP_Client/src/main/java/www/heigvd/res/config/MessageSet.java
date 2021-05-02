@@ -1,5 +1,5 @@
 /***
- * Autheur: Lev POZNIAKOFF, Axel VALLON
+ * Auteurs: Lev POZNIAKOFF, Axel VALLON
  */
 package www.heigvd.res.config;
 
@@ -24,15 +24,15 @@ public class MessageSet {
     /**
      * Constructeur par défaut
      */
-    public MessageSet(){
-        messages = new ArrayList<>();
-    }
+    public MessageSet(){}
 
     /**
      * Constructeur
      * @param messages la liste de message
      */
     public MessageSet(List<Message> messages){
+        if(messages.isEmpty())
+            throw new IllegalArgumentException("Message list can't be empty");
         this.messages = new ArrayList<>(messages);
     }
 

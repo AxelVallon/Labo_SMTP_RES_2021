@@ -7,10 +7,8 @@ groups:
       - email: martin@martin.ch
       - email: antoine@antoine.ch
       - email: dimitri@dimitri.ch
-
   - sender: martin@martin.ch
     recipients:
       - email: paul@paul.ch
       - email: antoine@antoine.ch
       - email: dimitri@dimitri.ch
-

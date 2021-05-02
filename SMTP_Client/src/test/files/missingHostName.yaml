@@ -1,5 +1,5 @@
 port: 3303
-ip:
+hostname:
 
 groups:
   - sender: paul@paul.ch

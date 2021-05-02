@@ -1,5 +1,5 @@
 port:
-ip: "0.0.0.0"
+hostname: "0.0.0.0"
 
 groups:
   - sender: paul@paul.ch
