@@ -103,7 +103,7 @@ Pour utiliser ce client SMTP, vous devrez effectuer les étapes suivantes :
 
    2. `./SMTP_Client/config/config.yaml`
 
-      ```
+      ```yaml
       port: 25
       hostname: "localhost"
       
