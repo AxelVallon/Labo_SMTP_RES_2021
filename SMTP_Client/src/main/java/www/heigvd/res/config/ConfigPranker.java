@@ -24,7 +24,7 @@ public class ConfigPranker {
     @Setter private int port;
     private String hostname;
     private List<Group> groups;
-    
+
     public ConfigPranker(){
         hostname = "";
         groups = new ArrayList<>();
