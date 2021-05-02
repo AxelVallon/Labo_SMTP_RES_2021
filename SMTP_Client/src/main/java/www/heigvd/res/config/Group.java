@@ -5,6 +5,10 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Représente un groupe de victime
+ * Celui-ci possède un envoyeur et une liste de récepteur ( 2 minimum)
+ */
 public class Group {
     @Getter @Setter
     Victim sender;

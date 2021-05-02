@@ -16,6 +16,7 @@ import lombok.Setter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,6 +24,11 @@ public class ConfigPranker {
     @Setter private int port;
     private String hostname;
     private List<Group> groups;
+    
+    public ConfigPranker(){
+        hostname = "";
+        groups = new ArrayList<>();
+    }
 
     public ConfigPranker(int port, String hostname, List<Group> groups) {
         if(hostname.isEmpty())
