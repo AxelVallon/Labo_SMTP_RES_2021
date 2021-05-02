@@ -24,17 +24,25 @@ public class ClientSMPT {
 
     }
 
-    public void sendMail() throws IOException {
+    /**
+     * Permet d'envoyer les mails à tous les groupes configuré avec des contenu de mail alléatoires
+     * @throws IOException
+     */
+    public void sendMails() throws IOException {
         Random rand = new Random();
 
-        //Pacours des groupes
+        //Parcours des groupes, pour chaque groupe un email est envoyé
         for(Group group : config.getGroups()) {
+            /** Configuration des entrées sorties **/
             Socket socket = new Socket(config.getHostname(), config.getPort());
             PrintWriter os =
                     new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in =
                     new BufferedReader(
                             new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8 ));
+            /** Fin configuration entrées sorties **/
+
+            /** Convertation d'envoi de mail avec le serveur SMTP **/
             startWith(in.readLine(), "220 ");
             os.println("EHLO server");
             //attente sur 250 HELP
@@ -44,17 +52,17 @@ public class ClientSMPT {
                 startWith(tmp, "250");
             } while (!tmp.startsWith("250 "));
 
-            List<Victim> recipients = group.getRecipients();
             os.println("MAIL FROM: <" + group.getSender().getEmail() + ">");
             startWith(in.readLine(), "250 ");
 
-            for (int RCPTIndex = 0; RCPTIndex < recipients.size(); RCPTIndex++) {
-                os.println("RCPT TO: <" + recipients.get(RCPTIndex).getEmail() + ">");
+            for (Victim recipient : group.getRecipients()) {
+                os.println("RCPT TO: <" + recipient.getEmail() + ">");
                 startWith(in.readLine(), "250 ");
             }
             os.println("DATA");
             startWith(in.readLine(), "354 ");
-            //TODO send data, forge mail
+
+            // Séléection aléatoire d'un message
             Message message = messages.get(rand.nextInt(messages.size()));
 
             os.println(forgeEmailContent(group, message));
@@ -62,12 +70,20 @@ public class ClientSMPT {
             startWith(in.readLine(), "250 ");
             os.println("QUIT");
             startWith(in.readLine(), "221 ");
+            /** Fin de conversation avec le serveur SMTP **/
+
             socket.close();
             in.close();
             os.close();
         }
     }
 
+    /**
+     * Forge le contenu du message à envoyer
+     * @param group Groupe ciblé par le mail
+     * @param message Message à envoyer
+     * @return le contenu du mail formaté
+     */
     private String forgeEmailContent(Group group, Message message){
         StringBuilder forgedEmail = new StringBuilder();
         forgedEmail.append("From: ").append(group.getSender().getEmail()).append('\n');
