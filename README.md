@@ -130,6 +130,17 @@ Pour utiliser ce client SMTP, vous devrez effectuer les étapes suivantes :
 
    Si vos fichiers de configuration sont bien configuré, tout devrait être ok.
 
+   Ainsi l'invite de commande devrait vous afficher ceci:
+   
+   ![photo_2021-05-02_20-30-33](./figures/gitBashResult.PNG)
+   
+   Si vous avez 3 groupes vous aurez 3 fois le messages qui s'affiche.
+   
+   Et après refresh de la page, le serveur mockmock devrait afficher ceci.
+   ![photo_2021-05-02_20-30-33](./figures/MockMockResult.PNG)
+   
+   Si vous cliquez sur le sujet, vous pourrez consulter l'email envoyer. Vous aurez normalement une page similaire à la suivante:
+   ![photo_2021-05-02_20-30-33](./figures/ExampleMail.PNG)
    
 
 ## Détails techniques
