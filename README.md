@@ -50,7 +50,7 @@ Les fichiers pour cette mettre en place cette configuration sont les suivants :
    docker run -p 25:25 -p 8282:8282 axel/mock-server 
    ```
 
-   Ce script va runner le conteneur, et ouvrir les ports 25 et 8282 en local, donc faites attention à au fait que vous ne les utilisez pas déjà au préalable. Si vous utilisez déjà un de ces ports, vous pouvez les changer en modifiant les ports utilisé par le serveur dans le ficher `Dockerfile`,  avec une modification de la compilation sur le serveur avec `java -jar MockMock.jar -p SMTPPORT -h WEBPAGEPORT`, et modifier donc aussi après les ouverture de port  locale dans le script `run.sh`.
+   Ce script va runner le conteneur, et ouvrir les ports 25 et 8282 en local, donc faites attention au fait que vous ne les utilisez pas déjà au préalable. Si vous utilisez déjà un de ces ports, vous pouvez les changer en modifiant les ports utilisé par le serveur dans le ficher `Dockerfile`,  avec une modification de la compilation sur le serveur avec `java -jar MockMock.jar -p SMTPPORT -h WEBPAGEPORT`, et modifier donc aussi après les ouverture de port  locale dans le script `run.sh`.
 
 4. Maintenant que le docker est allumé et fonctionnel, vous pouvez essayer d'accéder à l'interface web du serveur Mock, en accédant à l'adresse http://localhost:8282/. Vous devriez avoir accès à la page suivantes :
 
@@ -61,6 +61,110 @@ Les fichiers pour cette mettre en place cette configuration sont les suivants :
    //TODO explication sur le fichier de configuration
 
 
+
+## Implémentation
+
+La schéma relationnel de cette application est le suivant :
+
+//TODO copier schéma dans dossier figures et pointer dessus
+
+
+
+#### sendMails
+
+Nous allons seulement présenter un élément dans cette partie, et est la fonction qui permet d'envoyer des mail à tous les groupes configurés.
+
+```java
+/**
+     * Permet d'envoyer les mails à tous les groupes configuré avec des contenu de mail alléatoires
+     * @throws IOException
+     */
+    public void sendMails() throws IOException {
+        Random rand = new Random();
+
+        //Parcours des groupes, pour chaque groupe un email est envoyé
+        for(Group group : config.getGroups()) {
+            /** Configuration des entrées sorties **/
+            Socket socket = new Socket(config.getHostname(), config.getPort());
+            PrintWriter os =
+                    new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in =
+                    new BufferedReader(
+                            new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8 ));
+            /** Fin configuration entrées sorties **/
+
+            /** Convertation d'envoi de mail avec le serveur SMTP **/
+            startWith(in.readLine(), "220 ");
+            os.println("EHLO server");
+            //attente sur 250 HELP
+            String tmp;
+            do {
+                tmp = in.readLine();
+                startWith(tmp, "250");
+            } while (!tmp.startsWith("250 "));
+
+            os.println("MAIL FROM: <" + group.getSender().getEmail() + ">");
+            startWith(in.readLine(), "250 ");
+
+            for (Victim recipient : group.getRecipients()) {
+                os.println("RCPT TO: <" + recipient.getEmail() + ">");
+                startWith(in.readLine(), "250 ");
+            }
+            os.println("DATA");
+            startWith(in.readLine(), "354 ");
+
+            // Séléection aléatoire d'un message
+            Message message = messages.get(rand.nextInt(messages.size()));
+
+            os.println(forgeEmailContent(group, message));
+            os.println("\r\n.\r\n");
+            startWith(in.readLine(), "250 ");
+            os.println("QUIT");
+            startWith(in.readLine(), "221 ");
+            /** Fin de conversation avec le serveur SMTP **/
+
+            socket.close();
+            in.close();
+            os.close();
+        }
+    }
+```
+
+Cette fonction est utilisé, qui permet une connexion au serveur SMTP, est en fait une conversation avec le serveur SMTP. Ce protocole est soumis à une quantité de norme qui nous assure un comportement à peu près fixe, et l'avantage de cette norme est de pouvoir implémenter ce client qui est fonctionnel dans n'importe quel contexte. 
+
+Donc pour développer cette fonction, nous avons suivi la norme disponible ici : https://tools.ietf.org/html/rfc5321
+
+Elle contient toute les détails du protocole défini par la RFC 5321, soit du protocole SMTP. 
+
+Vous trouverez un exemple tiré du document ci-dessus, qui vous montreras comment fonctionne ce protocole, et vous permettra donc aussi de comprendre comment a été mis en place le client ci-dessus : 
+
+```
+S: 220 foo.com Simple Mail Transfer Service Ready
+      C: EHLO bar.com
+      S: 250-foo.com greets bar.com
+      S: 250-8BITMIME
+      S: 250-SIZE
+      S: 250-DSN
+      S: 250 HELP
+      C: MAIL FROM:<Smith@bar.com>
+      S: 250 OK
+      C: RCPT TO:<Jones@foo.com>
+      S: 250 OK
+      C: RCPT TO:<Green@foo.com>
+      S: 550 No such user here
+      C: RCPT TO:<Brown@foo.com>
+      S: 250 OK
+      C: DATA
+      S: 354 Start mail input; end with <CRLF>.<CRLF>
+      C: Blah blah blah...
+      C: ...etc. etc. etc.
+      C: .
+      S: 250 OK
+      C: QUIT
+      S: 221 foo.com Service closing transmission channel
+```
+
+ 
 
 ### Contenu rapport
 

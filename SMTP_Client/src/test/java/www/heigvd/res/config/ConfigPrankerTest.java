@@ -13,7 +13,7 @@ class ConfigPrankerTest {
         } catch (Exception e){
             assertTrue(true, "Exception catched");
         }
-        fail("Exception not catched !");
+        fail("Exception not caught !");
     }
 
 
