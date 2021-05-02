@@ -29,7 +29,7 @@ public class ClientSMPT {
     public void sendMail() throws IOException {
         messages.shuffleMessages();
         //Pacours des groupes
-        for(int groupIndex=0; groupIndex < config.getGroups().size(); ++groupIndex) {
+        for(Group group : config.getGroups()) {
             Socket socket = new Socket(config.getHostname(), config.getPort());
             PrintWriter os =
                     new PrintWriter(socket.getOutputStream(), true);
@@ -45,8 +45,8 @@ public class ClientSMPT {
                 startWith(tmp, "250");
             } while (!tmp.startsWith("250 "));
 
-            List<Victim> recipients = config.getGroups().get(groupIndex).getRecipients();
-            os.println("MAIL FROM: <" + config.getGroups().get(groupIndex).getSender().getEmail() + ">");
+            List<Victim> recipients = group.getRecipients();
+            os.println("MAIL FROM: <" + group.getSender().getEmail() + ">");
             startWith(in.readLine(), "250 ");
 
             for (int RCPTIndex = 0; RCPTIndex < recipients.size(); ++RCPTIndex) {
@@ -56,7 +56,9 @@ public class ClientSMPT {
             os.println("DATA");
             startWith(in.readLine(), "354 ");
             //TODO send data, forge mail
-            os.println(messages.get(groupIndex % messages.getMessages().size()));
+            String message = messages.get(0);
+
+            os.println(forgeEmailContent(group, message));
             os.println("\r\n.\r\n");
             startWith(in.readLine(), "250 ");
             os.println("QUIT");
@@ -67,10 +69,19 @@ public class ClientSMPT {
         }
     }
 
-    private String forgeEmailContent(Group group){
+    private String forgeEmailContent(Group group, String message){
         StringBuilder forgedEmail = new StringBuilder();
         forgedEmail.append("From: ").append(group.getSender().getEmail()).append('\n');
         forgedEmail.append("To : ");
+        for (Victim recipient : group.getRecipients()){
+            forgedEmail.append(recipient.getEmail()).append(",");
+        }
+        // On change la dernière virgule avec un saut à la ligne
+        if (group.getRecipients().size() > 0)
+            forgedEmail.replace(forgedEmail.length() - 1, forgedEmail.length(), "\n");
+        forgedEmail.append("Subject : ").append(messages.getSubject()).append("\n");
+        forgedEmail.append(message);
+        System.out.println(forgedEmail);
         
         return forgedEmail.toString();
     }
