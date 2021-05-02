@@ -79,7 +79,7 @@ public class ClientSMPT {
         // On change la dernière virgule avec un saut à la ligne
         if (group.getRecipients().size() > 0)
             forgedEmail.replace(forgedEmail.length() - 1, forgedEmail.length(), "\n");
-        forgedEmail.append("Subject : ").append(messages.getSubject()).append("\n");
+        forgedEmail.append("Subject : ").append(messages.getSubject()).append("\n\n");
         forgedEmail.append(message);
         System.out.println(forgedEmail);
         
