@@ -8,44 +8,30 @@ import lombok.Getter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Messages {
     @Getter
     List<Message> messages;
 
-
-    public Messages(){
-        this.messages = new ArrayList<>();
-
-    }
-
-    public Messages(List<String> messages, String subject){
-        this();
-        checkListValidity(messages);
+    public Messages(List<Message> messages){
+        this.messages = new ArrayList<>(messages);
     }
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
 
+    public Message getRandomMessage(){
+        Random rand = new Random();
+        return messages.get(rand.nextInt(messages.size()));
+    }
     public Message get(int i){
         return messages.get(i);
     }
-    public int size(){return messages.size();}
 
-    /**
-     * Verifie la validité d'une liste de message (pas vide, aucun message vide)
-     * @param list, la liste à vérifier
-     */
-    private void checkListValidity(List<String> list){
-        if(list.isEmpty())
-            throw new IllegalArgumentException("List is empty");
-        for(String s: list)
-            if(s.isEmpty())
-                throw new IllegalArgumentException("One of the strings is empty");
-    }
+    public int size(){return messages.size();}
 
     public static Messages loadFromYAML(String path) throws IOException {
         if(path.isEmpty())

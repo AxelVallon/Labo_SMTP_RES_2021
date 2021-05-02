@@ -13,9 +13,13 @@ public class Group {
 
     public Group(Victim sender, List<Victim> recipients) throws Exception {
         if(recipients.size() < 2)
-            throw new Exception();
+            throw new IllegalArgumentException("Recipients must be at least 2");
+        if(sender == null)
+            throw new NullPointerException("sender can't be null");
         this.sender = sender;
         this.recipients = recipients;
     }
+
     public Group(){}
+
 }
