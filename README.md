@@ -126,12 +126,13 @@ Pour utiliser ce client SMTP, vous devrez effectuer les étapes suivantes :
 
    3. Pour exécuter le projet, placer vous dans le dossier `./SMTP_Client ` et effectuer les commandes suivantes :
 
-      ```
+      ```bash
+       mvn clean compile assembly:single #il faut avoir Maven installé
        java -jar target/SMTP_Client-1.0-SNAPSHOT-jar-with-dependencies.jar
       ```
-
+      
       Si vos fichiers de configuration sont bien configuré, tout devrait être ok.
-
+   
    
 
 ## Détails techniques

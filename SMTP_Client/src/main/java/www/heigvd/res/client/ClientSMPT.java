@@ -73,6 +73,7 @@ public class ClientSMPT {
             startWith(in.readLine(), "221 ");
             /** Fin de conversation avec le serveur SMTP **/
 
+            System.out.println("Un mail a ete envoye avec succes");
             socket.close();
             in.close();
             os.close();
