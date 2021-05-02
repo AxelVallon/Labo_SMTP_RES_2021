@@ -56,9 +56,6 @@ Les fichiers pour cette mettre en place cette configuration sont les suivants :
 
    ![image-20210430191616502](./figures/image-20210430191616502.png)
 
-5. Maintenant, vous pouvez vérifier les paramètres de configuration de connexion de l'application pour qu'il se connecte au bon serveur SMTP, dans le fichier
-
-   //TODO explication sur le fichier de configuration
 
 ## Configuration
 
