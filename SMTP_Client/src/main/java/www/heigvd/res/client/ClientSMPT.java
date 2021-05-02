@@ -20,7 +20,6 @@ public class ClientSMPT {
     private MessageSet messageSet;
 
     public ClientSMPT(String configPath, String messagesPath) throws IOException {
-        //TODO init param config, à voir si tu veux le passer par le main
         config = ConfigPranker.loadFromConfig(configPath);
         messageSet = MessageSet.loadFromYAML(messagesPath);
 
@@ -98,7 +97,7 @@ public class ClientSMPT {
             forgedEmail.replace(forgedEmail.length() - 1, forgedEmail.length(), "\n");
         forgedEmail.append("Subject : ").append(message.getSubject()).append("\n\n");
         forgedEmail.append(message.getContent());
-        System.out.println(forgedEmail);
+
         
         return forgedEmail.toString();
     }
