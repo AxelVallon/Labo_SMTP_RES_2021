@@ -124,15 +124,15 @@ Pour utiliser ce client SMTP, vous devrez effectuer les étapes suivantes :
 
       Ce exemple de fichier de configuration spécifie les options de connexion au serveur SMTP en premier lieu, et dessous vous aurez les différentes groupes de victime que vous définissez, avec expéditive du message, et dessous toutes les adresses mail ciblées. Vous devrez garder la même structure que ci-dessus.
 
-   3. Pour exécuter le projet, placer vous dans le dossier `./SMTP_Client ` et effectuer les commandes suivantes :
+3. Pour exécuter le projet, placer vous dans le dossier `./SMTP_Client ` et effectuer les commandes suivantes :
 
-      ```bash
-       mvn clean compile assembly:single #il faut avoir Maven installé
-       java -jar target/SMTP_Client-1.0-SNAPSHOT-jar-with-dependencies.jar
-      ```
-      
-      Si vos fichiers de configuration sont bien configuré, tout devrait être ok.
-   
+   ```bash
+    mvn clean compile assembly:single #il faut avoir Maven installé, compilation
+    java -jar target/SMTP_Client-1.0-SNAPSHOT-jar-with-dependencies.jar
+   ```
+
+   Si vos fichiers de configuration sont bien configuré, tout devrait être ok.
+
    
 
 ## Détails techniques
@@ -145,6 +145,8 @@ Vous pouvez observer les éléments suivants sur le schéma :
 
 - Le client récupère les paramètres de connexion, et la liste des message qui choisit aléatoirement
 - sendMails va envoyer les mails pour tous les groupes présents dans le fichier de configuration.
+- ConfigPranker récupère les infos du fichier de config et crée les groupes
+- MessageSet récupère les messages et donne un message aléatoire quand demandé
 
 #### sendMails
 
@@ -239,14 +241,3 @@ S: 220 foo.com Simple Mail Transfer Service Ready
       C: QUIT
       S: 221 foo.com Service closing transmission channel
 ```
-
- 
-
-### Contenu rapport
-
-Your report MUST include the following sections:
-
-- **A brief description of your project**: if people exploring GitHub find your repo, without a prior knowledge of the RES course, they should be able to understand what your repo is all about and whether they should look at it more closely.
-- **Instructions for setting up a mock SMTP server (with Docker - which you will learn all about in the next 2 weeks)**. The user who wants to experiment with your tool but does not really want to send pranks immediately should be able to use a mock SMTP server. For people who are not familiar with this concept, explain it to them in simple terms. Explain which mock server you have used and how you have set it up.
-- **Clear and simple instructions for configuring your tool and running a prank campaign**. If you do a good job, an external user should be able to clone your repo, edit a couple of files and send a batch of e-mails in less than 10 minutes.
-- **A description of your implementation**: document the key aspects of your code. It is probably a good idea to start with a class diagram. Decide which classes you want to show (focus on the important ones) and describe their responsibilities in text. It is also certainly a good idea to include examples of dialogues between your client and an SMTP server (maybe you also want to include some screenshots here).
