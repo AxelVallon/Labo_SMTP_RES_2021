@@ -14,15 +14,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class ClientSMPT {
-    private final String DEFAULT_CONFIG = "config/config.yaml";
-    private final String DEFAULT_MESSAGES = "config/mails.yaml";
+    public static final String DEFAULT_CONFIG = "config/config.yaml";
+    public static final String DEFAULT_MESSAGES = "config/mails.yaml";
     private ConfigPranker config;
     private MessageSet messageSet;
 
-    public ClientSMPT() throws IOException {
+    public ClientSMPT(String configPath, String messagesPath) throws IOException {
         //TODO init param config, à voir si tu veux le passer par le main
-        config = ConfigPranker.loadFromConfig(DEFAULT_CONFIG);
-        messageSet = MessageSet.loadFromYAML(DEFAULT_MESSAGES);
+        config = ConfigPranker.loadFromConfig(configPath);
+        messageSet = MessageSet.loadFromYAML(messagesPath);
 
     }
 
