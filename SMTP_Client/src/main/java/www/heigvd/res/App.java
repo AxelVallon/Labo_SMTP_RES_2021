@@ -14,8 +14,10 @@ public class App
     {
         try {
             new ClientSMPT().sendMail();
+
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("erreur");
         }
 
     }

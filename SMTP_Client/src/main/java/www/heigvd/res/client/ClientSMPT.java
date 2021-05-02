@@ -1,6 +1,7 @@
 package www.heigvd.res.client;
 
 import www.heigvd.res.config.ConfigPranker;
+import www.heigvd.res.config.Group;
 import www.heigvd.res.config.Messages;
 import www.heigvd.res.config.Victim;
 
@@ -32,30 +33,30 @@ public class ClientSMPT {
     }
 
     public void sendMail() throws IOException {
-        Socket socket = new Socket(config.getHostname(), config.getPort());
-        PrintWriter os =
-                new PrintWriter(socket.getOutputStream(), true);
-        BufferedReader in =
-                new BufferedReader(
-                        new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8 ));
-        startWith(in.readLine(), "220 ");
-        os.println("EHLO server");
-        //attente sur 250 HELP
-        String tmp;
-        do {
-            tmp = in.readLine();
-            startWith(tmp, "250");
-        } while (!tmp.startsWith("250 "));
-
         messages.shuffleMessages();
         //Pacours des groupes
         for(int groupIndex=0; groupIndex < config.getGroups().size(); ++groupIndex) {
+            Socket socket = new Socket(config.getHostname(), config.getPort());
+            PrintWriter os =
+                    new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in =
+                    new BufferedReader(
+                            new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8 ));
+            startWith(in.readLine(), "220 ");
+            os.println("EHLO server");
+            //attente sur 250 HELP
+            String tmp;
+            do {
+                tmp = in.readLine();
+                startWith(tmp, "250");
+            } while (!tmp.startsWith("250 "));
+
             List<Victim> recipients = config.getGroups().get(groupIndex).getRecipients();
-            os.println("MAIL FROM:<" + config.getGroups().get(groupIndex).getSender().getEmail() + ">");
+            os.println("MAIL FROM: <" + config.getGroups().get(groupIndex).getSender().getEmail() + ">");
             startWith(in.readLine(), "250 ");
-            //TODO: ajouter boucle pour plusieurs RCPT TO
+
             for (int RCPTIndex = 0; RCPTIndex < recipients.size(); ++RCPTIndex) {
-                os.println("RCPT TO:<" + recipients.get(RCPTIndex).getEmail() + ">");
+                os.println("RCPT TO: <" + recipients.get(RCPTIndex).getEmail() + ">");
                 startWith(in.readLine(), "250 ");
             }
             os.println("DATA");
@@ -66,13 +67,18 @@ public class ClientSMPT {
             startWith(in.readLine(), "250 ");
             os.println("QUIT");
             startWith(in.readLine(), "221 ");
-
-
-
+            socket.close();
+            in.close();
+            os.close();
         }
-        socket.close();
-        in.close();
-        os.close();
+    }
+
+    private String forgeEmailContent(Group group){
+        StringBuilder forgedEmail = new StringBuilder();
+        forgedEmail.append("From: ").append(group.getSender().getEmail()).append('\n');
+        forgedEmail.append("To : ");
+        
+        return forgedEmail.toString();
     }
 
     /**
