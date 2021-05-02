@@ -124,7 +124,13 @@ Pour utiliser ce client SMTP, vous devrez effectuer les étapes suivantes :
 
       Ce exemple de fichier de configuration spécifie les options de connexion au serveur SMTP en premier lieu, et dessous vous aurez les différentes groupes de victime que vous définissez, avec expéditive du message, et dessous toutes les adresses mail ciblées. Vous devrez garder la même structure que ci-dessus.
 
-   3. Build du projet
+   3. Pour exécuter le projet, placer vous dans le dossier `./SMTP_Client ` et effectuer les commandes suivantes :
+
+      ```
+       java -jar target/SMTP_Client-1.0-SNAPSHOT-jar-with-dependencies.jar
+      ```
+
+      Si vos fichiers de configuration sont bien configuré, tout devrait être ok.
 
    
 
