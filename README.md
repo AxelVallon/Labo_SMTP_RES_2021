@@ -4,11 +4,11 @@
 
 ## Description du projet
 
-Ce projet est un client qui permet à son utilisateur d'envoyer automatiquement d'une adresse mails à plusieurs autres adresses email une blague, et sans authentification.
+Ce projet est un client qui permet à son utilisateur d'envoyer automatiquement d'une adresse mails à plusieurs autres adresses email une blague, et sans authentification. 
 
 ## Serveur Mock
 
-Vous trouverez dans le dossier `docker`, 4 fichiers qui vous permettront de mettre en place votre propre serveur Mock, qui vous permettront de tester cette application, sans avoir besoin d'envoyer les email aux adresse email ciblées.
+Vous trouverez dans le dossier `./docker`, les 4 fichiers qui vous permettront de mettre en place votre propre serveur Mock, qui vous permettront de tester cette application, sans avoir besoin d'envoyer les email aux adresse email ciblées. 
 
 Les fichiers pour cette mettre en place cette configuration sont les suivants :
 
@@ -60,19 +60,88 @@ Les fichiers pour cette mettre en place cette configuration sont les suivants :
 
    //TODO explication sur le fichier de configuration
 
+## Configuration
 
+Pour utiliser ce client SMTP, vous devrez effectuer les étapes suivantes :
 
-## Implémentation
+1. Cloner ce projet
 
-La schéma relationnel de cette application est le suivant :
+2. Configurer les deux fichiers de configuration 
 
-//TODO copier schéma dans dossier figures et pointer dessus
+   1. `./SMTP_Client/config/mails.yaml`
 
+      ```yaml
+      messages:
+        - subject: "fruits et légumes"
+          content: "Comment appelle-t-on une captapulte à salade ?
+      
+      
+          Un lance roquette !!
+      
+          Aller bisous"
+      
+        - subject: "Animalerie"
+          content: "Bonjour
+      
+          C'est un éléphant qui rentre dans un café, et plouf!!
+      
+          Bonne journée!"
+      
+        - subject: "Cuisine"
+          content: "Bonjour!
+      
+          C'est 2 cookies dans un micro-onde, l'un dit:
+      
+          - Dis-donc, il fait chaud là dedans !
+      
+          - Oh mon dieu, un cookie qui parle !!!
+      
+          Aller salut l'équipe."
+      ```
 
+      Ce exemple de fichier est destiné à configurer les message qui seront automatiquement distribué aux groupes, vous devrez suivre la structure ci-dessus, et gardant bien `messages : ` en haut, et créer un `subject` et un `content`, avec le contenu entouré de guillemet.
+
+   2. `./SMTP_Client/config/config.yaml`
+
+      ```
+      port: 25
+      hostname: "localhost"
+      
+      groups:
+        - sender: paul@paul.ch
+          recipients:
+            - email: martin@martin.ch
+            - email: antoine@antoine.ch
+            - email: dimitri@dimitri.ch
+      
+        - sender: martin@martin.ch
+          recipients:
+            - email: paul@paul.ch
+            - email: antoine@antoine.ch
+            - email: dimitri@dimitri.ch
+      
+      ```
+
+      Ce exemple de fichier de configuration spécifie les options de connexion au serveur SMTP en premier lieu, et dessous vous aurez les différentes groupes de victime que vous définissez, avec expéditive du message, et dessous toutes les adresses mail ciblées. Vous devrez garder la même structure que ci-dessus.
+
+   3. Build du projet
+
+   
+
+## Détails techniques
+
+La schéma relationnel de cette application est le suivant : 
+
+![photo_2021-05-02_20-30-33](./figures/photo_2021-05-02_20-30-33.jpg)
+
+Vous pouvez observer les éléments suivants sur le schéma : 
+
+- Le client récupère les paramètres de connexion, et la liste des message qui choisit aléatoirement
+- sendMails va envoyer les mails pour tous les groupes présents dans le fichier de configuration.
 
 #### sendMails
 
-Nous allons seulement présenter un élément dans cette partie, et est la fonction qui permet d'envoyer des mail à tous les groupes configurés.
+Nous allons seulement présenter un élément important de ce projet, et il s'agit de la fonction qui permet d'envoyer des mail à tous les groupes configurés.
 
 ```java
 /**
@@ -130,7 +199,7 @@ Nous allons seulement présenter un élément dans cette partie, et est la fonct
     }
 ```
 
-Cette fonction est utilisé, qui permet une connexion au serveur SMTP, est en fait une conversation avec le serveur SMTP. Ce protocole est soumis à une quantité de norme qui nous assure un comportement à peu près fixe, et l'avantage de cette norme est de pouvoir implémenter ce client qui est fonctionnel dans n'importe quel contexte. 
+Cette fonction permet d'établir des connexions au serveur SMTP, est en fait des conversations avec le serveur SMTP. Ce protocole est soumis à une quantité de norme qui nous assure un comportement à peu près fixe, et l'avantage de cette norme est de pouvoir implémenter ce client qui est fonctionnel dans n'importe quel contexte. 
 
 Donc pour développer cette fonction, nous avons suivi la norme disponible ici : https://tools.ietf.org/html/rfc5321
 
