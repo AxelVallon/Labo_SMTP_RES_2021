@@ -80,10 +80,5 @@ public class ConfigPranker {
 
     public static void main (String[] args) throws IOException {
         ConfigPranker cp = loadFromConfig("config/config.yaml");
-
     }
-
-
-
-
 }

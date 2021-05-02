@@ -1,5 +1,5 @@
-port: 25
-ip: "localhost"
+port:
+ip: "0.0.0.0"
 
 groups:
   - sender: paul@paul.ch
@@ -13,4 +13,3 @@ groups:
       - email: paul@paul.ch
       - email: antoine@antoine.ch
       - email: dimitri@dimitri.ch
-

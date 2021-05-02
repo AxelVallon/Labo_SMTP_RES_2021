@@ -1,6 +1,4 @@
 package www.heigvd.res.config;
-
-
 import lombok.Getter;
 import lombok.Setter;
 

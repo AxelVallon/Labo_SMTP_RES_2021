@@ -11,8 +11,8 @@ public class ClientSMPT {
     //TODO : modifier avec fichier de config
     private String hostName = "localhost";
     private int portNumber = 25;
-    private String mailSource = "axel.vallon@heig-vd.ch";
-    private String mailDestination = "axel.vallon@heig-vd.ch";
+    private String mailSource = "lev.pozniakoff@balelec.ch";
+    private String mailDestination = "lev.pozniakoff@heig-vd.ch";
 
     public ClientSMPT(){
         //TODO init param config, à voir si tu veux le passer par le main
