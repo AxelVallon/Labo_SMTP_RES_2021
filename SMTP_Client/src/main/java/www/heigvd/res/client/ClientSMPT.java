@@ -1,3 +1,6 @@
+/**
+ * Auteurs: Lev POZNIAKOFF, Axel VALLON.
+ */
 package www.heigvd.res.client;
 
 import www.heigvd.res.config.*;
@@ -8,19 +11,18 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Random;
 
 public class ClientSMPT {
     private final String DEFAULT_CONFIG = "config/config.yaml";
     private final String DEFAULT_MESSAGES = "config/mails.yaml";
     private ConfigPranker config;
-    private Messages messages;
+    private MessageSet messageSet;
 
     public ClientSMPT() throws IOException {
         //TODO init param config, à voir si tu veux le passer par le main
         config = ConfigPranker.loadFromConfig(DEFAULT_CONFIG);
-        messages = Messages.loadFromYAML(DEFAULT_MESSAGES);
+        messageSet = MessageSet.loadFromYAML(DEFAULT_MESSAGES);
 
     }
 
@@ -63,7 +65,7 @@ public class ClientSMPT {
             startWith(in.readLine(), "354 ");
 
             // Séléection aléatoire d'un message
-            Message message = messages.get(rand.nextInt(messages.size()));
+            Message message = messageSet.getRandomMessage();
 
             os.println(forgeEmailContent(group, message));
             os.println("\r\n.\r\n");

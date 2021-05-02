@@ -11,6 +11,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 
 import lombok.Getter;
+import lombok.Setter;
 
 
 import java.io.File;
@@ -20,32 +21,28 @@ import java.util.List;
 
 @Getter
 public class ConfigPranker {
-    private int port;
+    @Setter private int port;
     private String hostname;
     private List<Group> groups;
 
     public ConfigPranker(){
-        this.groups = new ArrayList<>();
-        this.hostname = "";
+        hostname = "";
+        groups = new ArrayList<>();
     }
 
-    public ConfigPranker(int port, String hostname, List<String> messages, List<Group> groups) {
-        this.port = port;
-        //if(!ipValid(hostname))
-            //throw new IllegalArgumentException("IP is not valid");
-        this.hostname = hostname;
+    public ConfigPranker(int port, String hostname, List<Group> groups) {
+        if(hostname.isEmpty())
+            throw new IllegalArgumentException("hostname can't be empty");
         if(groups.isEmpty())
             throw new IllegalArgumentException("Minimum size for groups is 1");
+        this.hostname = hostname;
+        this.port = port;
         this.groups = groups;
     }
 
-   public void setPort(int port){
-        this.port = port; //voir condition de fail
-   }
-
    public void setHostname(String hostname){
-        //if(!ipValid(hostname))
-            //throw new IllegalArgumentException("IP is not valid");
+        if(hostname.isEmpty())
+            throw new IllegalArgumentException("hostname can't be empty");
         this.hostname = hostname;
    }
 
@@ -56,17 +53,6 @@ public class ConfigPranker {
    }
 
     /**
-     * Validate an IPv4 address
-     * @param ip to validate
-     * @return true if the ip is valid
-     */
-    private static boolean ipValid(final String ip) {
-        String PATTERN = "^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$";
-        return ip.matches(PATTERN);
-    }
-
-
-    /**
      * Charge une config dans un object ConfigPranker
      * @param path, le chemin vers la config
      * @return le ConfigPranker nouvellement créé avec la config
@@ -75,10 +61,5 @@ public class ConfigPranker {
     public static ConfigPranker loadFromConfig(String path) throws IOException {
         ObjectMapper mapperConfig = new ObjectMapper(new YAMLFactory());
         return mapperConfig.readValue(new File(path), ConfigPranker.class);
-    }
-
-
-    public static void main (String[] args) throws IOException {
-        ConfigPranker cp = loadFromConfig("config/config.yaml");
     }
 }
