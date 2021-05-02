@@ -1,25 +1,27 @@
 messages:
-  - "Comment appelle-t-on une captapulte à salade ?
+  - subject: "fruits et légumes"
+    content: "Comment appelle-t-on une captapulte à salade ?
 
 
-  Un lance roquette !!
+    Un lance roquette !!
 
-  Aller bisous"
+    Aller bisous"
 
-  - "Bonjour
+  - subject: "Animalerie"
+    content: "Bonjour
 
-  C'est un éléphant qui rentre dans un café, et plouf!!
+    C'est un éléphant qui rentre dans un café, et plouf!!
 
-  Bonne journée!"
+    Bonne journée!"
 
-  - "Bonjour!
+  - subject: "Cuisine"
+    content: "Bonjour!
 
-  C'est 2 cookies dans un micro-onde, l'un dit:
+    C'est 2 cookies dans un micro-onde, l'un dit:
 
-  - Dis-donc, il fait chaud là dedans !
+    - Dis-donc, il fait chaud là dedans !
 
-  - Oh mon dieu, un cookie qui parle !!!
+    - Oh mon dieu, un cookie qui parle !!!
 
-  Aller salut l'équipe."
+    Aller salut l'équipe."
 
-subject: "Une petite blagounette"

@@ -1,9 +1,6 @@
 package www.heigvd.res.client;
 
-import www.heigvd.res.config.ConfigPranker;
-import www.heigvd.res.config.Group;
-import www.heigvd.res.config.Messages;
-import www.heigvd.res.config.Victim;
+import www.heigvd.res.config.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Random;
 
 public class ClientSMPT {
     private final String DEFAULT_CONFIG = "config/config.yaml";
@@ -27,7 +25,8 @@ public class ClientSMPT {
     }
 
     public void sendMail() throws IOException {
-        messages.shuffleMessages();
+        Random rand = new Random();
+
         //Pacours des groupes
         for(Group group : config.getGroups()) {
             Socket socket = new Socket(config.getHostname(), config.getPort());
@@ -49,14 +48,14 @@ public class ClientSMPT {
             os.println("MAIL FROM: <" + group.getSender().getEmail() + ">");
             startWith(in.readLine(), "250 ");
 
-            for (int RCPTIndex = 0; RCPTIndex < recipients.size(); ++RCPTIndex) {
+            for (int RCPTIndex = 0; RCPTIndex < recipients.size(); RCPTIndex++) {
                 os.println("RCPT TO: <" + recipients.get(RCPTIndex).getEmail() + ">");
                 startWith(in.readLine(), "250 ");
             }
             os.println("DATA");
             startWith(in.readLine(), "354 ");
             //TODO send data, forge mail
-            String message = messages.get(0);
+            Message message = messages.get(rand.nextInt(messages.size()));
 
             os.println(forgeEmailContent(group, message));
             os.println("\r\n.\r\n");
@@ -69,7 +68,7 @@ public class ClientSMPT {
         }
     }
 
-    private String forgeEmailContent(Group group, String message){
+    private String forgeEmailContent(Group group, Message message){
         StringBuilder forgedEmail = new StringBuilder();
         forgedEmail.append("From: ").append(group.getSender().getEmail()).append('\n');
         forgedEmail.append("To : ");
@@ -79,8 +78,8 @@ public class ClientSMPT {
         // On change la dernière virgule avec un saut à la ligne
         if (group.getRecipients().size() > 0)
             forgedEmail.replace(forgedEmail.length() - 1, forgedEmail.length(), "\n");
-        forgedEmail.append("Subject : ").append(messages.getSubject()).append("\n\n");
-        forgedEmail.append(message);
+        forgedEmail.append("Subject : ").append(message.getSubject()).append("\n\n");
+        forgedEmail.append(message.getContent());
         System.out.println(forgedEmail);
         
         return forgedEmail.toString();

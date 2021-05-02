@@ -13,38 +13,27 @@ import java.util.List;
 
 public class Messages {
     @Getter
-    List<String> messages;
-    @Getter
-    String subject;
+    List<Message> messages;
+
 
     public Messages(){
         this.messages = new ArrayList<>();
-        this.subject = ";";
+
     }
 
     public Messages(List<String> messages, String subject){
         this();
         checkListValidity(messages);
-        this.messages.addAll(messages);
-        this.subject = subject;
     }
 
-    public void setMessages(List<String> messages) {
-        checkListValidity(messages);
+    public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public void shuffleMessages(){
-        Collections.shuffle(messages);
-    }
-
-    public String get(int i){
+    public Message get(int i){
         return messages.get(i);
     }
+    public int size(){return messages.size();}
 
     /**
      * Verifie la validité d'une liste de message (pas vide, aucun message vide)
@@ -67,7 +56,6 @@ public class Messages {
 
     public static void main(String[] args) throws IOException {
         Messages m = loadFromYAML("config/mails.yaml");
-        for (String s: m.getMessages())
-            System.out.println(s);
+
     }
 }
